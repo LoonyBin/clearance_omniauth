@@ -1,0 +1,3 @@
+[submodule "app/assets/images/clearance_omniauth/authbuttons"]
+	path = app/assets/images/clearance_omniauth/authbuttons
+	url = https://github.com/intridea/authbuttons.git
