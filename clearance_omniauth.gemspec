@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
   s.version     = ClearanceOmniauth::VERSION
   s.authors     = ["Subhash Chandra"]
   s.email       = ["TMaYaD+gems@gmail.com"]
-  s.homepage    = "github.com/LoonyBin/clearance_omniauth"
+  s.homepage    = "http://github.com/LoonyBin/clearance_omniauth"
   s.summary     = "mountable engine for omniauth for clearance"
-  s.description = "TODO: Description of ClearanceOmniauth."
+  s.description = "Pluggable engine for using omniauth with clearance"
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
 
