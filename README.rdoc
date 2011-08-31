@@ -1,3 +1,16 @@
 = ClearanceOmniauth
 
-This project rocks and uses MIT-LICENSE.
+# This project rocks and uses MIT-LICENSE.
+
+# Install clearance files
+
+  rails g clearance:install
+
+# create authentications migration for omniauth
+
+  rake clearance_omniauth:install:migrations  # Copy migrations from clearance_omniauth to application
+
+# mount the engine at /auth; That's where omniauth expects it to be
+# add this to your routes
+
+  mount ClearanceOmniauth::Engine => "/auth"
