@@ -25,6 +25,7 @@ module ClearanceOmniauth
         else
           session[:omniauth] = omniauth.except('extra')
           redirect_to sign_up_url
+        end
       end
     end
 
