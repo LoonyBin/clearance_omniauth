@@ -1,5 +1,5 @@
 ClearanceOmniauth::Engine.routes.draw do
-  match '/:provider/callback' => 'authentications#create'
+  match '/:provider/callback' => 'authentications#create', via: [:get, :post]
   resources :authentications
-  resources :users, :controller => 'users'
+  resources :users, controller: 'users'
 end

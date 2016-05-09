@@ -8,9 +8,17 @@ module ClearanceOmniauth
       omniauth = request.env["omniauth.auth"]
       authentication = Authentication.find_by_provider_and_uid(omniauth['provider'], omniauth['uid'])
       if authentication
-        flash[:notice] = "Signed in successfully."
-        sign_in authentication.user
-        redirect_back_or "/"
+        user = authentication.user
+        sign_in user
+        user.apply_omniauth(omniauth)
+        if user.save
+          flash[:notice] = "Signed in successfully."
+          redirect_to Configuration.after_login_url
+        else
+          flash[:alert] = "There is an issue signing you in."
+          flash[:notice] = user.errors
+          redirect_to Configuration.login_failure_url
+        end
       elsif current_user
         current_user.authentications.create(:provider => omniauth['provider'], :uid => omniauth['uid'])
         flash[:notice] = "Authentication successful."
@@ -21,10 +29,12 @@ module ClearanceOmniauth
         if user.save
           flash[:notice] = "Signed in successfully."
           sign_in user
-          redirect_back_or "/"
+          redirect_to Configuration.after_login_url
         else
+          flash[:alert] = "There is an issue signing you up."
           session[:omniauth] = omniauth.except('extra')
-          redirect_to sign_up_url
+          flash[:notice] = user.errors 
+          redirect_to Configuration.login_failure_url
         end
       end
     end
