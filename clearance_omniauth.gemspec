@@ -10,14 +10,18 @@ Gem::Specification.new do |s|
   s.authors     = ["Subhash Chandra"]
   s.email       = ["TMaYaD+gemcutter@gmail.com"]
   s.homepage    = "http://github.com/LoonyBin/clearance_omniauth"
-  s.summary     = "mountable engine for omniauth for clearance"
-  s.description = "Pluggable engine for using omniauth with clearance"
+  s.summary     = "Mountable engine for OmniAuth integration with Clearance"
+  s.description = "Pluggable Rails engine for using OmniAuth with Clearance authentication"
+  s.license     = "MIT"
+
+  s.required_ruby_version = ">= 3.0.0"
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
 
-  s.add_dependency "rails", "> 3.1.0"
-  s.add_dependency "clearance"
-  s.add_dependency "omniauth"
+  s.add_dependency "rails", ">= 7.0", "< 9.0"
+  s.add_dependency "clearance", ">= 2.0"
+  s.add_dependency "omniauth", ">= 2.0"
 
   s.add_development_dependency "sqlite3"
+  s.add_development_dependency "rspec-rails"
 end

@@ -1,7 +1,7 @@
-<%= form_for :session, :url => session_path do |form| %>
+<%= form_with scope: :session, url: session_path, local: true do |form| %>
   <div class="text_field">
     <%= form.label :email %>
-    <%= form.text_field :email, :type => "email" %>
+    <%= form.email_field :email %>
   </div>
   <div class="text_field">
     <%= form.label :password %>

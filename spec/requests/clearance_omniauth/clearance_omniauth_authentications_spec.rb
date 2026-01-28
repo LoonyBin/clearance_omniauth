@@ -1,11 +1,10 @@
-require 'spec_helper'
+require "rails_helper"
 
-describe "Authentications" do
-  describe "GET /clearance_omniauth_authentications" do
-    it "works! (now write some real specs)" do
-      # Run the generator again with the --webrat flag if you want to use webrat methods/matchers
-      get clearance_omniauth_authentications_path
-      response.status.should be(200)
+RSpec.describe "ClearanceOmniauth::Authentications", type: :request do
+  describe "GET /auth/authentications" do
+    it "returns a successful response" do
+      get clearance_omniauth.authentications_path
+      expect(response).to have_http_status(:success)
     end
   end
 end

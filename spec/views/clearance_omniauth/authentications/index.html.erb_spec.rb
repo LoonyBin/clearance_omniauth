@@ -1,28 +1,23 @@
-require 'spec_helper'
+require "rails_helper"
 
-describe "authentications/index.html.erb" do
-  before(:each) do
+RSpec.describe "clearance_omniauth/authentications/index", type: :view do
+  before do
     assign(:authentications, [
-      stub_model(Authentication,
-        :user => nil,
-        :provider => "Provider",
-        :uid => "Uid"
-      ),
-      stub_model(Authentication,
-        :user => nil,
-        :provider => "Provider",
-        :uid => "Uid"
-      )
+      build(:authentication, provider: "twitter", uid: "123"),
+      build(:authentication, provider: "facebook", uid: "456")
     ])
   end
 
   it "renders a list of authentications" do
     render
-    # Run the generator again with the --webrat flag if you want to use webrat matchers
-    assert_select "tr>td", :text => nil.to_s, :count => 2
-    # Run the generator again with the --webrat flag if you want to use webrat matchers
-    assert_select "tr>td", :text => "Provider".to_s, :count => 2
-    # Run the generator again with the --webrat flag if you want to use webrat matchers
-    assert_select "tr>td", :text => "Uid".to_s, :count => 2
+
+    expect(rendered).to include("Twitter")
+    expect(rendered).to include("Facebook")
+  end
+
+  it "displays authentication providers" do
+    render
+
+    expect(rendered).to have_selector(".authentication", count: 2)
   end
 end

@@ -1,9 +1,4 @@
-<a href="/auth/twitter" class="auth_provider">
-    <%= image_tag "clearance_omniauth/authbuttons/png/twitter_64.png", :size => "64x64", :alt => "Twitter" %>Twitter</a>
-<a href="/auth/facebook" class="auth_provider">
-    <%= image_tag "clearance_omniauth/authbuttons/png/facebook_64.png", :size => "64x64", :alt => "Facebook" %>Facebook</a>
-<a href="/auth/google_apps" class="auth_provider">
-    <%= image_tag "clearance_omniauth/authbuttons/png/google_64.png", :size => "64x64", :alt => "Google" %>Google</a>
-<a href="/auth/open_id" class="auth_provider">
-    <%= image_tag "clearance_omniauth/authbuttons/png/openid_64.png", :size => "64x64", :alt => "OpenID" %>OpenID</a>
+<%= button_to "Sign in with Twitter", "/auth/twitter", method: :post, class: "auth_provider", data: { turbo: false } %>
+<%= button_to "Sign in with Facebook", "/auth/facebook", method: :post, class: "auth_provider", data: { turbo: false } %>
+<%= button_to "Sign in with Google", "/auth/google_oauth2", method: :post, class: "auth_provider", data: { turbo: false } %>
 <div class="clear"></div>

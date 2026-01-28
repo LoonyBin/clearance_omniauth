@@ -1,22 +1,111 @@
 = ClearanceOmniauth
 
-This project rocks and uses MIT-LICENSE.
+A Rails engine that integrates OmniAuth (social authentication) with Clearance (email/password authentication).
+This allows users to sign in via OAuth providers (Twitter, Facebook, Google, etc.) or traditional email/password,
+with the ability to link multiple authentication methods to a single user account.
 
-Install clearance files
+== Requirements
 
-  rails g clearance:install
+* Ruby >= 3.0
+* Rails >= 7.0
+* Clearance >= 2.0
+* OmniAuth >= 2.0
 
-create authentications migration for omniauth
+== Installation
 
-  rake clearance_omniauth:install:migrations  # Copy migrations from clearance_omniauth to application
+Add this line to your application's Gemfile:
 
-Install omniauth config file
+  gem 'clearance_omniauth'
 
-  rails g clearance_omniauth:install
+And then execute:
 
-Add the service keys of your choice to config/initializers/omniauth.rb
+  $ bundle install
 
-mount the engine at /auth; That's where omniauth expects it to be
-add this to your routes
+== Setup
+
+1. First, install Clearance if you haven't already:
+
+  $ rails g clearance:install
+
+2. Run the ClearanceOmniauth generator to copy migrations and create the OmniAuth initializer:
+
+  $ rails g clearance_omniauth:install
+
+  This will:
+  - Copy the authentications migration
+  - Create config/initializers/omniauth.rb
+  - Add authentication methods to your User model
+  - Mount the engine in your routes
+
+3. Run the migrations:
+
+  $ rails db:migrate
+
+4. Add your OAuth provider gems to your Gemfile. For example:
+
+  gem 'omniauth-twitter2'
+  gem 'omniauth-facebook'
+  gem 'omniauth-google-oauth2'
+  gem 'omniauth-github'
+
+5. Configure your OAuth providers in config/initializers/omniauth.rb:
+
+  Rails.application.config.middleware.use OmniAuth::Builder do
+    provider :twitter2, ENV["TWITTER_CLIENT_ID"], ENV["TWITTER_CLIENT_SECRET"]
+    provider :google_oauth2, ENV["GOOGLE_CLIENT_ID"], ENV["GOOGLE_CLIENT_SECRET"]
+    provider :github, ENV["GITHUB_CLIENT_ID"], ENV["GITHUB_CLIENT_SECRET"]
+  end
+
+== Configuration
+
+You can configure redirect URLs in an initializer:
+
+  ClearanceOmniauth::Configuration.after_login_url = "/dashboard"
+  ClearanceOmniauth::Configuration.login_failure_url = "/sign_in"
+
+== Manual Installation
+
+If you prefer to set things up manually:
+
+1. Copy the migrations:
+
+  $ rake clearance_omniauth:install:migrations
+
+2. Add to your User model:
+
+  has_many :authentications, class_name: "ClearanceOmniauth::Authentication", dependent: :destroy
+
+  def apply_omniauth(omniauth)
+    if email.blank? && omniauth["info"].present?
+      self.email = omniauth["info"]["email"]
+    end
+    authentications.build(provider: omniauth["provider"], uid: omniauth["uid"])
+  end
+
+  def password_required?
+    return false if authentications.any? && password.blank?
+    super
+  end
+
+3. Mount the engine in your routes (must be at /auth for OmniAuth):
 
   mount ClearanceOmniauth::Engine => "/auth"
+
+== Views
+
+The engine provides default views for:
+- Authentication provider buttons
+- Managing linked authentications
+
+You can override these views by creating files in your application:
+- app/views/clearance_omniauth/authentications/_auth_providers.html.erb
+- app/views/clearance_omniauth/authentications/index.html.erb
+
+== OmniAuth 2.x Notes
+
+OmniAuth 2.x uses POST requests for OAuth callbacks by default for CSRF protection.
+This engine is configured to handle both GET and POST callbacks.
+
+== License
+
+This project uses the MIT License.

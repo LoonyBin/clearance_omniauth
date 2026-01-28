@@ -1,5 +1,8 @@
 ClearanceOmniauth::Engine.routes.draw do
-  match '/:provider/callback' => 'authentications#create', via: [:get, :post]
-  resources :authentications
-  resources :users, controller: 'users'
+  # OmniAuth 2.x uses POST for callbacks by default
+  post "/:provider/callback", to: "authentications#create"
+  get "/:provider/callback", to: "authentications#create"
+  get "/failure", to: "authentications#failure"
+
+  resources :authentications, only: [:index, :destroy]
 end

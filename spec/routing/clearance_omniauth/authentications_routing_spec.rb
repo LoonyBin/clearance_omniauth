@@ -1,19 +1,45 @@
-require "spec_helper"
+require "rails_helper"
 
-describe AuthenticationsController do
+RSpec.describe ClearanceOmniauth::AuthenticationsController, type: :routing do
+  routes { ClearanceOmniauth::Engine.routes }
+
   describe "routing" do
-
-    it "routes to #index" do
-      get("/authentications").should route_to("authentications#index")
+    it "routes GET /:provider/callback to #create" do
+      expect(get: "/twitter/callback").to route_to(
+        controller: "clearance_omniauth/authentications",
+        action: "create",
+        provider: "twitter"
+      )
     end
 
-    it "routes to #create" do
-      post("/authentications").should route_to("authentications#create")
+    it "routes POST /:provider/callback to #create" do
+      expect(post: "/twitter/callback").to route_to(
+        controller: "clearance_omniauth/authentications",
+        action: "create",
+        provider: "twitter"
+      )
     end
 
-    it "routes to #destroy" do
-      delete("/authentications/1").should route_to("authentications#destroy", :id => "1")
+    it "routes GET /failure to #failure" do
+      expect(get: "/failure").to route_to(
+        controller: "clearance_omniauth/authentications",
+        action: "failure"
+      )
     end
 
+    it "routes GET /authentications to #index" do
+      expect(get: "/authentications").to route_to(
+        controller: "clearance_omniauth/authentications",
+        action: "index"
+      )
+    end
+
+    it "routes DELETE /authentications/:id to #destroy" do
+      expect(delete: "/authentications/1").to route_to(
+        controller: "clearance_omniauth/authentications",
+        action: "destroy",
+        id: "1"
+      )
+    end
   end
 end
